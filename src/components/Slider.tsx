@@ -33,7 +33,7 @@ const Slider = () => {
   return (
     <div className='flex flex-col lg:flex-row h-[calc(100vh-6rem)] md:h-[calc(100vh - 9rem)]'>
       {/* Text Container */}
-      <div className='bg-white flex justify-center items-center flex-col gap-2 p-9 lg:w-1/2 h-1/2 lg:h-full'>
+      <div className='bg-fuchsia-100 flex justify-center items-center flex-col gap-2 p-9 lg:w-1/2 h-1/2 lg:h-full'>
         <h1 className='uppercase text-red-500 text-5xl text-center font-extrabold mb-5'>
           {data[currentSlide].title}
         </h1>
