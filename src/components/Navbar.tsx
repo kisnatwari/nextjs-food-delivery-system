@@ -3,6 +3,7 @@ import React from 'react'
 import Menu from './Menu'
 import CartIcon from './CartIcon'
 import Image from 'next/image'
+import UserLinks from './UserLinks'
 
 const Navbar = () => {
   const user = false;
@@ -27,12 +28,7 @@ const Navbar = () => {
         </div>
 
         <CartIcon />
-        {
-          user ?
-            (<Link href="/cart">Orders</Link>)
-            :
-            (<Link href="/login">Login</Link>)
-        }
+        <UserLinks/>
       </div>
 
       <div className='md:hidden'>
