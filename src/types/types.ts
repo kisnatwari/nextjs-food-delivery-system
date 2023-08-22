@@ -23,5 +23,8 @@ export type OrderType = {
   desc?: string;
   img?: string;
   price: number;
+  products: ProductType[];
+  createdAt?: Date;
   options?: { title: string; additionalPrice: number }[];
+  status: string;
 }
