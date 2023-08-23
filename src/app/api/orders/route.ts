@@ -4,9 +4,6 @@ import { prisma } from "@/utils/connect"
 
 export const GET = async (req: NextRequest) => {
     const session = await getAuthSession();
-
-    console.log(session);
-
     if (session) {
         try {
             if (session.user.isAdmin) {

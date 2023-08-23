@@ -1,18 +1,16 @@
 "use client"
 import { OrderType } from "@/types/types";
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import React from "react";
+import { toast } from "react-toastify";
 
 const OrdersPage = () => {
 
   const { data: session, status } = useSession();
   const router = useRouter();
-  if (status === 'unauthenticated')
-    return router.push('/');
 
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -24,17 +22,34 @@ const OrdersPage = () => {
       ),
   })
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: ({ id, status, form }: { id: string, status: string, form: HTMLFormElement }) =>
+      fetch(`http://localhost:3000/api/orders/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status }),
+      }).then(() => form.reset()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+    }
+  });
+
+
+
+  if (status === 'unauthenticated')
+    return router.push('/');
+
   const handleUpdate = (e: React.FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    const status = form.elements[0].value;
-    fetch(`http://localhost:3000/api/orders/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ status }),
-    });
+    const input = form.elements[0] as HTMLInputElement;
+    const status = input.value;
+    mutation.mutate({ id, status, form });
+    toast.success('Order updated successfully');
   }
 
   if (isLoading || status === "loading") return 'Loading...';
@@ -71,8 +86,7 @@ const OrdersPage = () => {
                     </td>
                   ) : (
                     <td className="py-6 px-1">{order.status}</td>
-                  )
-                }
+                  )}
               </tr>
             ))
           }
